@@ -1,0 +1,11 @@
+# Animasjon: Storforbrukere av elektrisk energi i Grenland
+
+Dette prosjektet inneholder kildekode og datagrunnlag for en animasjon som viser 
+de største forbrukerne av elektrisk energi i Grenland. 
+
+De to siste søylene i animasjonen viser framtidig forbruk for prosjektene Yara Hegra 
+(grønn ammoniakkproduksjon til fullgjødsel) og Google (datasenter på Gromstul).
+
+Det mangler tall for bedrifter som Vianode, ABB, ENRX (EFD) og Kebony i datagrunnlaget. 
+Gi beskjed om du finner fritt tilgjengelige kilder for disse.
+
