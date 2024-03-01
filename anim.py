@@ -21,7 +21,7 @@ TODAYS_DATE = f'Animasjon laget den {datetime.date.today()}'
 # Animation settings
 TOTAL_DURATION = 60  # seconds for the main animation
 HOLD_DURATION = 3    # seconds to hold the last frame
-FPS = 24             # frames per second
+FPS = 50             # frames per second
 FIG_SCALE = 4        # Scale factor for the figure size
 RED_LIMIT = 3        # Top number of bars to color red
 
