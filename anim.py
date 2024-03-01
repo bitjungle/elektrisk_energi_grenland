@@ -16,7 +16,7 @@ ANIMATION_TITLE = 'Forbruk av elektrisk energi for bedrifter i Grenland'
 COPYRIGHT_NOTICE = 'Creative Commons BY-SA : Rune Mathisen (2024)'
 DATA_SOURCE_NOTICE = 'Hoveddatakilde: Miljødirektoratet (Norske utslipp)'
 MUSIC_COPYRIGHT_NOTICE = 'Musikk: lesfm-22579021 (Pixabay License)'
-TODAYS_DATE = datetime.date.today()
+TODAYS_DATE = f'Animasjon laget den {datetime.date.today()}'
 
 # Animation settings
 TOTAL_DURATION = 60  # seconds for the main animation
@@ -97,7 +97,7 @@ def animate(frame_num, ax, df, total_frames):
     plt.text(0.5, 0.12, COPYRIGHT_NOTICE, ha='center', va='center', transform=ax.transAxes, fontsize=10, color='silver')
     plt.text(0.5, 0.10, DATA_SOURCE_NOTICE, ha='center', va='center', transform=ax.transAxes, fontsize=10, color='silver')
     plt.text(0.5, 0.06, MUSIC_COPYRIGHT_NOTICE, ha='center', va='center', transform=ax.transAxes, fontsize=8, color='silver')
-    plt.text(0.5, 0.04, f'Animasjon laget den {TODAYS_DATE}', ha='center', va='center', transform=ax.transAxes, fontsize=8, color='silver')
+    plt.text(0.5, 0.04, TODAYS_DATE, ha='center', va='center', transform=ax.transAxes, fontsize=8, color='silver')
 
 def create_and_save_animation(df, duration, hold, fps, output_file):
     """
