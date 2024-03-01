@@ -45,13 +45,13 @@ def read_and_prepare_data(file_path, sheet_name, header, usecols, sortcol):
         sheet_name (str): Name of the sheet in the Excel file.
         header (int): Row (0-indexed) to use as the header.
         usecols (str): Columns to read from the Excel file.
+        sortcol (str): Column to use for sorting.
 
     Returns:
         pandas.DataFrame: Sorted DataFrame.
     """
     df = pd.read_excel(file_path, sheet_name=sheet_name, header=header, usecols=usecols)
-    sorted_df = df.sort_values(by=sortcol, ascending=True)
-    return sorted_df
+    return df.sort_values(by=sortcol, ascending=True)
 
 def animate(frame_num, ax, df, total_frames):
     """
