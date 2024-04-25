@@ -1,29 +1,20 @@
-"""
-Script to create an animation of electricity consumption for companies in Grenland.
-
-Copyright (C) 2024 BITJUNGLE Rune Mathisen
-This code is licensed under a GPLv3 license 
-See http://www.gnu.org/licenses/gpl-3.0.html 
-"""
-
 import datetime
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import pandas as pd
 
 # Configuration and Constants
-ANIMATION_TITLE = 'Forbruk av elektrisk energi for bedrifter i Grenland'
+ANIMATION_TITLE = 'Forbruk av elektrisk energi for industribedrifter i Porsgrunn og Bamble (blå søyler) \nsammenliknet med totalforbruk (all næring, privat og kommunal forbruk) i utvalgte kommuner (grønne søyler) \nog noen framtidige forbrukere i Porsgrunn og Skien (røde søyler)'
 COPYRIGHT_NOTICE = 'Creative Commons BY-SA : Rune Mathisen (2024)'
-DATA_SOURCE_NOTICE = 'Hoveddatakilde: Miljødirektoratet (Norske utslipp)'
+DATA_SOURCE_NOTICE = 'Hoveddatakilde: Miljødirektoratet (Norske utslipp) og SSB'
 MUSIC_COPYRIGHT_NOTICE = 'Musikk: lesfm-22579021 (Pixabay License)'
 TODAYS_DATE = f'Animasjon laget den {datetime.date.today()}'
 
 # Animation settings
-TOTAL_DURATION = 60  # seconds for the main animation
-HOLD_DURATION = 3    # seconds to hold the last frame
+TOTAL_DURATION = 75  # seconds for the main animation
+HOLD_DURATION = 5    # seconds to hold the last frame
 FPS = 50             # frames per second
 FIG_SCALE = 4        # Scale factor for the figure size
-RED_LIMIT = 3        # Top number of bars to color red
 
 # Output settings
 OUTPUT_FOLDER = 'anim'
@@ -32,11 +23,14 @@ OUTPUT_FILE = 'anim.mp4'
 # Data source settings
 DATA_FOLDER = 'data'
 DATA_FILE = 'el-forbruk.xlsx'
-DATA_SHEET = 'liste-over-forbrukere'
-DATA_COLS = 'A:B'
+#DATA_SHEET = 'liste-over-forbrukere'
+DATA_SHEET = 'forbrukere-og-kommuner'
+DATA_COL_NAME = 'Bedrift'
 DATA_COL_ENERGY = 'MWh'
+DATA_COL_YEAR = 'år'
+DATA_COL_COLOR = 'farge'
 
-def read_and_prepare_data(file_path, sheet_name, header, usecols, sortcol):
+def read_and_prepare_data(file_path, sheet_name, header, sortcol):
     """
     Read and sort data from an Excel file.
 
@@ -44,13 +38,12 @@ def read_and_prepare_data(file_path, sheet_name, header, usecols, sortcol):
         file_path (str): Path to the Excel file.
         sheet_name (str): Name of the sheet in the Excel file.
         header (int): Row (0-indexed) to use as the header.
-        usecols (str): Columns to read from the Excel file.
         sortcol (str): Column to use for sorting.
 
     Returns:
         pandas.DataFrame: Sorted DataFrame.
     """
-    df = pd.read_excel(file_path, sheet_name=sheet_name, header=header, usecols=usecols)
+    df = pd.read_excel(file_path, sheet_name=sheet_name, header=header)
     return df.sort_values(by=sortcol, ascending=True)
 
 def animate(frame_num, ax, df, total_frames):
@@ -71,15 +64,9 @@ def animate(frame_num, ax, df, total_frames):
     ax.set_xlabel(DATA_COL_ENERGY, fontsize=12)
     ax.set_title(ANIMATION_TITLE, fontsize=14)
 
-    bar_colors = []  # List to store color of each bar
-    bar_lengths = []  # List to store length of each bar
+    bar_lengths = []
     for i, val in enumerate(df[DATA_COL_ENERGY]):
         start_time = (TOTAL_DURATION / len(df)) * i
-
-        if i >= len(df) - RED_LIMIT:
-            bar_colors.append('red')
-        else:
-            bar_colors.append('skyblue')            
 
         if elapsed_time >= start_time:
             growth_time = elapsed_time - start_time
@@ -88,8 +75,8 @@ def animate(frame_num, ax, df, total_frames):
             bar_lengths.append(val * growth_phase)
         else:
             bar_lengths.append(0)
-        
-    ax.barh(df['Bedrift'], bar_lengths, color=bar_colors)
+
+    ax.barh(df[DATA_COL_NAME], bar_lengths, color=df[DATA_COL_COLOR])
     current_max = max(bar_lengths) if bar_lengths else 0
     ax.set_xlim(0, current_max * 1.1)
     ax.set_ylim(-1, len(df))
@@ -118,7 +105,7 @@ def create_and_save_animation(df, duration, hold, fps, output_file):
     print(output_file)
 
 if __name__ == "__main__":
-    df_sorted = read_and_prepare_data(f'{DATA_FOLDER}/{DATA_FILE}', DATA_SHEET, 0, DATA_COLS, DATA_COL_ENERGY)
+    df_sorted = read_and_prepare_data(f'{DATA_FOLDER}/{DATA_FILE}', DATA_SHEET, 0, DATA_COL_ENERGY)
     print('Data read from Excel file:')
     print(df_sorted)
     create_and_save_animation(df_sorted, TOTAL_DURATION, HOLD_DURATION, FPS, f'{OUTPUT_FOLDER}/{OUTPUT_FILE}')
